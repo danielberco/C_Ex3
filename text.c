@@ -5,7 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #define LINE 256
-#define WORD 30
+#define WORD 50
 
 int similar (char *s, char *t, int n);
 int substring( char * str1, char * str2);
