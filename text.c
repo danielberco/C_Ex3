@@ -1,97 +1,151 @@
+//
+// Created by bercod on 05/01/2021.
+//
 #include <stdio.h>
 #include <string.h>
-#define LINESIZE 256
-#define WORDSIZE 30
+#include <ctype.h>
+#define LINE 256
+#define WORD 30
 
+int get_word(char w[]);
+int getWord (char words []);
+int similar (char *s, char *t, int n);
+int get_line(char s[]);
+int substring( char * str1, char * str2);
+void print_lines(char * str);
+void print_similar_words (char *s);
+
+
+int main (int argc, char *argv[])
+{
+  char line[LINE];
+  char str_search[WORD];
+  char ch;
+  scanf("%s", str_search);
+  scanf("%c", &ch);
+  scanf("%c", &ch);
+  get_line(line);
+  printf("You chose option %c\n", ch);
+  if (ch == 'a') {
+    //print_lines_containing(str_search, line);
+    printf("Printing all lines from the text file containing the word \"%s\":\n", str_search);
+  }
+  else { //str_option[0] == 'b'
+    printf("Printing all words from the text file similar to \"%s\":\n", str_search);
+    print_similar_words(str_search);
+  }
+  return 0;
+}
+/*
+int main() {
+
+    // reads the first line "cat a/b"
+    char word[WORD];
+    scanf(" %s", word);
+    char ch;
+    scanf(" %c", &ch);
+
+    if(ch == 'a'){
+        print_lines(word);
+    }
+    if(ch == 'b'){
+        print_similar_words(word);
+    }
+}
+''*/
+
+int get_word(char s[]){
+  scanf("%s", s);
+  return strlen(s);
+}
+
+int getWord (char words [])
+{
+    int i=0;
+    char c;
+    while(!isspace(c=getchar()) && c!=EOF){
+        words[i] = c;
+        i++;
+    }
+    words[i] = 0;
+    if(c!=EOF)
+        return i+1;
+    return i;
+}
+
+
+
+int similar (char *s, char *t, int n)
+{
+    if(strlen(s) < strlen(t)) return 0;
+    while(*s){
+        if(*t){
+            if(*s != *t) n--;
+            else t++;
+        }
+        else{
+            n--;
+        }
+        s++;
+    }
+    return n==0;
+}
+
+/*
+int get_line(char s[]) {
+    int i = 0;
+    char c;
+    while ((c = getchar()) != '\n' && c!= EOF) {
+        s[i] = c;
+        i++;
+    }
+    s[i] = 0;
+    if (c!=EOF)
+        return i+1;
+    return i;
+}
+*/
 int get_line(char s[]){
 
-  fgets(s, LINESIZE , stdin);
+  fgets(s, LINE , stdin);
   //printf("Read: %s", s);
 
   s[strcspn( s, "\n" )] = '\0';
   return strlen(s);
 }
 
-int substring(char *str1, char *str2){
-  return 0;
-}
-
-int similar(char *s, char *t, int n){
-  return 0;
-}
-
-void print_lines_containing(char *str, char line[]){
-  get_line(line);
-
-  while(1){
-    char* str_currentword = strtok(line, " ");
-    int b = 0;
-
-    while(str_currentword != NULL){
-      if (str_currentword == str) {
-        b = 1;
-      }
-      str_currentword = strtok(line, " ");
-    }
-
-
-    if (b == 1) {
-      printf("%s\n", line);
-    }
-    get_line(line);
-    if (line == !EOF) {
-      break;
-    }
-  }
-
-}
-
-void print_similar_words(char *str, char line[]){
-
-
-}
-
-int main (int argc, char *argv[])
+int substring( char * str1, char * str2)
 {
-  char line[LINESIZE]; get_line(line);
-
-  char* str_search = strtok(line, " ");
-  char* str_option = strtok(NULL, " ");
-  get_line(line);
-
-  if (str_option[0] == 'a') {
-    print_lines_containing(str_search, line);
-  } else {
-    //str_option[0] == 'b'
-    print_similar_words(str_search, line);
-  }
-  return 0;
-}
-
-/*
-#include <stdio.h>
-#define BUFFERSIZE 250
-
-
-int main (int argc, char *argv[])
-{
-    char buffer[BUFFERSIZE];
-    fgets(buffer, BUFFERSIZE , stdin);
-    printf("Read: %s", buffer);
-    fgets(buffer, BUFFERSIZE , stdin);
-    fgets(buffer, BUFFERSIZE , stdin);
-    printf("Read: %s", buffer);
+    char *c = str2;
+    while (*str1) {
+        str2 = c;
+        while (*str1 == *str2) {
+            str1++;
+            str2++;
+            if (*str2 == 0 )
+                return 1;
+        }
+        str1++;
+    }
     return 0;
-
-
-  //int arr[5] = {99, 78, -1, 42, 12};
-  //int n = sizeof(arr)/sizeof(int);
-
-  //print_array(&arr[0], n);
-
-  //insertion_sort(&arr[0], n);
-
-  //print_array(&arr[0], n);
-
 }
-*/
+void print_lines(char * str)
+{
+    char text [LINE];
+    while (get_line(text)) {
+        if (substring(text,str)) {
+            printf("%s\n",text);
+        }
+    }
+}
+
+void print_similar_words (char *s) {
+  char text [LINE];
+  //int c = scanf("%s",text );
+  for (size_t i = 0; i < 50; i++) {
+    scanf("%s",text);
+    if (similar(text,s,0) || similar(text,s,1)){
+      printf("%s\n",text);
+    }
+  }
+}
