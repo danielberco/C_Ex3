@@ -12,7 +12,7 @@ int getWord (char words []);
 int similar (char *s, char *t, int n);
 int get_line(char s[]);
 int substring( char * str1, char * str2);
-void print_lines(char * str);
+void print_lines_containing(char str[]);
 void print_similar_words (char *s);
 
 
@@ -27,8 +27,8 @@ int main (int argc, char *argv[])
   get_line(line);
   printf("You chose option %c\n", ch);
   if (ch == 'a') {
-    //print_lines_containing(str_search, line);
     printf("Printing all lines from the text file containing the word \"%s\":\n", str_search);
+    print_lines_containing(str_search);
   }
   else { //str_option[0] == 'b'
     printf("Printing all words from the text file similar to \"%s\":\n", str_search);
@@ -129,21 +129,42 @@ int substring( char * str1, char * str2)
     }
     return 0;
 }
-void print_lines(char * str)
+void print_lines_containing(char str[])
 {
-    char text [LINE];
-    while (get_line(text)) {
-        if (substring(text,str)) {
-            printf("%s\n",text);
+  char s[LINE];
+  int isContains = 1;
+  char *c = fgets(s, LINE , stdin);
+
+  printf("1" );
+  while ( c != NULL)
+  {
+    for (int i = 0; i < (strlen(s)- strlen(str)); i++)
+    {
+      for (int j = 0; j < strlen(str); j++)
+      {
+        if (s[i+j] != str[j])
+        {
+          isContains = 0;
+          j = strlen(str) + 1;
         }
+      }
     }
+    if (isContains == 1)
+    {
+      printf("%s\n", s);
+    }
+    c = fgets(s, LINE , stdin);
+  }
 }
+
+
 
 void print_similar_words (char *s) {
   char text [LINE];
   //int c = scanf("%s",text );
-  for (size_t i = 0; i < 50; i++) {
-    scanf("%s",text);
+  int c = 1;
+  while (c == 1) {
+    c = scanf("%s",text);
     if (similar(text,s,0) || similar(text,s,1)){
       printf("%s\n",text);
     }
